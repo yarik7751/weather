@@ -58,8 +58,8 @@ public class BeginDataFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //todo
-        etCity.setText("Baranovichi");
+        String city = CustomSharedPreference.getCity(getContext());
+        etCity.setText(city != null ? city : "");
     }
 
     @Override

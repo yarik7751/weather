@@ -131,6 +131,7 @@ public class WeatherFragment extends BaseFragment {
     }
 
     private void setCurrentWeatherInfo(CurrentWeather currentWeather) {
+        pbLoadCurrentWeather.setVisibility(View.GONE);
         llWeatherTitle.setVisibility(View.VISIBLE);
         llWeatherData.setVisibility(View.VISIBLE);
         tvCity.setText(currentWeather.getName());
