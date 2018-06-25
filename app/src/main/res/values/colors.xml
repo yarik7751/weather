@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1a2431</color>
+    <color name="colorPrimaryDark">#1a2431</color>
+    <color name="colorAccent">@color/white</color>
+
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+
+    <color name="morning_start">#ffd431</color>
+    <color name="morning_end">#ff7d3c</color>
+
+    <color name="noon_start">#5fbdfb</color>
+    <color name="noon_end">#0153b6</color>
+
+    <color name="evening_start">#90380d</color>
+    <color name="evening_end">#fe781a</color>
+
+    <color name="night_start">#2c303e</color>
+    <color name="night_end">#6b7489</color>
+
+    <color name="button_bg">#3bcb53</color>
+</resources>

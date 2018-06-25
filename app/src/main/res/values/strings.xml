@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">YarikWeather</string>
+    <string name="pleace_enter_your_city">Pleace, enter your city</string>
+    <string name="set_city">Set city</string>
+    <string name="wrong_data">Wrong data</string>
+
+    <string name="api_key">ff535cc70b248947360db6c5378a97c5</string>
+</resources>
