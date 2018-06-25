@@ -20,4 +20,7 @@
     <color name="night_end">#6b7489</color>
 
     <color name="button_bg">#3bcb53</color>
+
+    <color name="positive_btn">#5cef8d</color>
+    <color name="negative_btn">#ef5c5c</color>
 </resources>

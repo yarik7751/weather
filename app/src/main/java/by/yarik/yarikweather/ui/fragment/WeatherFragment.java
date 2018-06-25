@@ -2,9 +2,11 @@ package by.yarik.yarikweather.ui.fragment;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,6 +29,7 @@ import by.yarik.yarikweather.ui.fragment.base.BaseFragment;
 import by.yarik.yarikweather.util.AndroidUtils;
 import by.yarik.yarikweather.util.CustomSharedPreference;
 import by.yarik.yarikweather.util.DateUtils;
+import by.yarik.yarikweather.util.DialogUtils;
 import by.yarik.yarikweather.util.Utils;
 
 public class WeatherFragment extends BaseFragment {
@@ -40,7 +43,10 @@ public class WeatherFragment extends BaseFragment {
     @BindView(R.id.tv_humidity) TextView tvHumidity;
     @BindView(R.id.tv_wind) TextView tvWind;
     @BindView(R.id.ll_top_info) LinearLayout llTopInfo;
+    @BindView(R.id.ll_weather_title) LinearLayout llWeatherTitle;
+    @BindView(R.id.ll_weather_data) LinearLayout llWeatherData;
     @BindView(R.id.pb_load_week_weather) ProgressBar pbLoadWeekWeather;
+    @BindView(R.id.pb_load_current_weather) ProgressBar pbLoadCurrentWeather;
     @BindView(R.id.rv_week_weather) RecyclerView rvWeekWeather;
 
     private static WeatherFragment weatherFragment;
@@ -79,6 +85,8 @@ public class WeatherFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         setTopSize();
+        llWeatherTitle.setVisibility(View.INVISIBLE);
+        llWeatherData.setVisibility(View.INVISIBLE);
         llTopInfo.setBackgroundResource(DateUtils.getResByDayOfWeek(getContext()));
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvWeekWeather.setLayoutManager(layoutManager);
@@ -88,15 +96,43 @@ public class WeatherFragment extends BaseFragment {
             setCurrentWeatherInfo(currentWeather);
             startWeekWeatherService();
         } else {
+            startCurrentWeatherService();
+        }
+    }
+
+    private void startCurrentWeatherService() {
+        if(AndroidUtils.isNetworkOnline(getContext())) {
             getActivity().startService(CurrentWeatherService.getIntent(getContext(), CustomSharedPreference.getCity(getContext())));
+        } else {
+            DialogUtils.noConnection(getContext(),
+                    (DialogInterface dialog, int which) -> {
+                        dialog.cancel();
+                        startCurrentWeatherService();
+                    },
+                    (DialogInterface dialog, int which) -> {
+                        getActivity().onBackPressed();
+                    }).show();
         }
     }
 
     private void startWeekWeatherService() {
-        getActivity().startService(WeekWeatherService.getIntent(getContext(), CustomSharedPreference.getCity(getContext())));
+        if(AndroidUtils.isNetworkOnline(getContext())) {
+            getActivity().startService(WeekWeatherService.getIntent(getContext(), CustomSharedPreference.getCity(getContext())));
+        } else {
+            DialogUtils.noConnection(getContext(),
+                    (DialogInterface dialog, int which) -> {
+                        dialog.cancel();
+                        startWeekWeatherService();
+                    },
+                    (DialogInterface dialog, int which) -> {
+                        getActivity().onBackPressed();
+                    }).show();
+        }
     }
 
     private void setCurrentWeatherInfo(CurrentWeather currentWeather) {
+        llWeatherTitle.setVisibility(View.VISIBLE);
+        llWeatherData.setVisibility(View.VISIBLE);
         tvCity.setText(currentWeather.getName());
         tvDate.setText(DateUtils.getCurrentDateByStr());
         tvWeatherInfo.setText(currentWeather.getWeather().get(0).getDescription());
@@ -144,6 +180,7 @@ public class WeatherFragment extends BaseFragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            pbLoadCurrentWeather.setVisibility(View.GONE);
             CurrentWeather currentWeather = intent.getParcelableExtra(CurrentWeatherService.ACTION);
             setCurrentWeatherInfo(currentWeather);
             startWeekWeatherService();
@@ -154,7 +191,7 @@ public class WeatherFragment extends BaseFragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            pbLoadWeekWeather.setVisibility(View.INVISIBLE);
+            pbLoadWeekWeather.setVisibility(View.GONE);
 
             WeekWeather weekWeather = intent.getParcelableExtra(WeekWeatherService.ACTION);
             WeekWeatherAdapter adapter = new WeekWeatherAdapter(getContext(), weekWeather.getWeatherList());

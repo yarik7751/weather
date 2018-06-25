@@ -5,4 +5,8 @@
     <string name="wrong_data">Wrong data</string>
 
     <string name="api_key">ff535cc70b248947360db6c5378a97c5</string>
+    <string name="no_connection">No connection!</string>
+    <string name="close_app">Close app</string>
+    <string name="try_again">Try again</string>
+    <string name="error">Error</string>
 </resources>

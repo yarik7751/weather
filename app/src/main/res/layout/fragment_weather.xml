@@ -1,47 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:background="@color/colorPrimary"
-    xmlns:tools="http://schemas.android.com/tools">
+    tools:background="@color/colorPrimary">
 
     <LinearLayout
         android:id="@+id/ll_top_info"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/morning_bg">
+        android:background="@drawable/morning_bg"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/ll_weather_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
             <TextView
-                style="@style/WeatherTextViewRegular"
                 android:id="@+id/tv_date"
+                style="@style/WeatherTextViewRegular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="20 July, 2018 (Monday)"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
             <TextView
-                style="@style/WeatherTextViewMedium"
                 android:id="@+id/tv_city"
+                style="@style/WeatherTextViewMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="Baranovichi"
-                android:textSize="24sp"/>
+                android:textSize="24sp" />
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/ll_weather_data"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
@@ -185,7 +187,20 @@
         android:id="@+id/rv_week_weather"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/ll_top_info"
+        tools:layout_editor_absoluteX="8dp" />
+
+    <ProgressBar
+        android:id="@+id/pb_load_current_weather"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/ll_top_info" />
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ll_top_info"
+        app:layout_constraintEnd_toEndOf="@+id/ll_top_info"
+        app:layout_constraintStart_toStartOf="@+id/ll_top_info"
+        app:layout_constraintTop_toTopOf="@+id/ll_top_info" />
 
 </android.support.constraint.ConstraintLayout>
