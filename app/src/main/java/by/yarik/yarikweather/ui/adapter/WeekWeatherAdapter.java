@@ -16,6 +16,7 @@ import by.yarik.yarikweather.api.pojo.Weather;
 import by.yarik.yarikweather.api.pojo.WeatherList;
 import by.yarik.yarikweather.api.pojo.WeekWeather;
 import by.yarik.yarikweather.util.DateUtils;
+import by.yarik.yarikweather.util.Utils;
 
 public class WeekWeatherAdapter extends RecyclerView.Adapter<WeekWeatherAdapter.WeekWeatherViewHolder> {
 
@@ -45,6 +46,8 @@ public class WeekWeatherAdapter extends RecyclerView.Adapter<WeekWeatherAdapter.
         int humidity = weather.getMain().getHumidity();
         holder.tvHumidity.setText(humidity + "%");
 
+        String code = weather.getWeather().get(0).getIcon();
+        holder.imgWeatherInfo.setImageResource(Utils.getDrawableByWeatherCode(context, code));
         holder.tvWeatherInfo.setText(weather.getWeather().get(0).getDescription());
 
         long dateLong = weather.getDt() * 1000;
@@ -74,7 +77,7 @@ public class WeekWeatherAdapter extends RecyclerView.Adapter<WeekWeatherAdapter.
             tvWind = (TextView) itemView.findViewById(R.id.tv_wind);
             tvTemper = (TextView) itemView.findViewById(R.id.tv_temper);
             tvHumidity = (TextView) itemView.findViewById(R.id.tv_humidity);
-            imgWeatherInfo = (ImageView) itemView.findViewById(R.id.img__weather_info);
+            imgWeatherInfo = (ImageView) itemView.findViewById(R.id.img_weather_info);
         }
     }
 }

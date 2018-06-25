@@ -19,6 +19,7 @@ import by.yarik.yarikweather.api.pojo.CurrentWeather;
 import by.yarik.yarikweather.service.CurrentWeatherService;
 import by.yarik.yarikweather.ui.activity.MainActivity;
 import by.yarik.yarikweather.ui.fragment.base.BaseFragment;
+import by.yarik.yarikweather.util.AndroidUtils;
 import by.yarik.yarikweather.util.CustomSharedPreference;
 import by.yarik.yarikweather.util.Utils;
 
@@ -79,6 +80,10 @@ public class BeginDataFragment extends BaseFragment {
 
     @OnClick(R.id.btn_set_info)
     public void setInfo() {
+        if(!AndroidUtils.isNetworkOnline(getContext())) {
+            Toast.makeText(getContext(), R.string.no_connection, Toast.LENGTH_SHORT).show();
+            return;
+        }
         String city = etCity.getText().toString();
         if(city != null && !city.isEmpty()) {
             CustomSharedPreference.setCity(getContext(), city);

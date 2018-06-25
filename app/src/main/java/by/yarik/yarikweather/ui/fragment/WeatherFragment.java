@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -48,6 +49,7 @@ public class WeatherFragment extends BaseFragment {
     @BindView(R.id.pb_load_week_weather) ProgressBar pbLoadWeekWeather;
     @BindView(R.id.pb_load_current_weather) ProgressBar pbLoadCurrentWeather;
     @BindView(R.id.rv_week_weather) RecyclerView rvWeekWeather;
+    @BindView(R.id.img_weather_info) ImageView imgWeatherInfo;
 
     private static WeatherFragment weatherFragment;
     public static WeatherFragment getInstance(CurrentWeather currentWeather) {
@@ -136,6 +138,10 @@ public class WeatherFragment extends BaseFragment {
         llWeatherData.setVisibility(View.VISIBLE);
         tvCity.setText(currentWeather.getName());
         tvDate.setText(DateUtils.getCurrentDateByStr());
+        imgWeatherInfo.setImageResource(Utils.getDrawableByWeatherCode(
+                getContext(),
+                currentWeather.getWeather().get(0).getIcon()
+                ));
         tvWeatherInfo.setText(currentWeather.getWeather().get(0).getDescription());
         tvTemper.setText(setTemper(currentWeather));
         tvWind.setText(currentWeather.getWind().getSpeed().intValue() + "m/s");

@@ -25,7 +25,7 @@ public class MainActivity extends BaseActivity {
         if(savedInstanceState == null) {
             String city = CustomSharedPreference.getCity(this);
             if(city == null) {
-                setBeginDataFragment();
+                setBeginDataFragment(false);
             } else {
                 setWeatherFragment(null);
             }
@@ -34,7 +34,7 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.fab)
     public void changeCity() {
-        setBeginDataFragment();
+        setBeginDataFragment(true);
     }
 
     public void setWeatherFragment(CurrentWeather currentWeather) {
@@ -42,8 +42,8 @@ public class MainActivity extends BaseActivity {
         onSwitchFragment(WeatherFragment.getInstance(currentWeather), "", false, false, R.id.fl_container);
     }
 
-    public void setBeginDataFragment() {
+    public void setBeginDataFragment(boolean add) {
         fab.setVisibility(View.GONE);
-        onSwitchFragment(BeginDataFragment.getInstance(), "", false, false, R.id.fl_container);
+        onSwitchFragment(BeginDataFragment.getInstance(), "", add, false, R.id.fl_container);
     }
 }

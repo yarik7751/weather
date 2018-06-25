@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="weather_values_drawable">
+        <item>@drawable/sun</item>
+        <item>@drawable/cloudy_and_sun</item>
+        <item>@drawable/cloud</item>
+        <item>@drawable/cloud</item>
+        <item>@drawable/cloudy_and_raining</item>
+        <item>@drawable/cloudy_and_raining</item>
+        <item>@drawable/lightning_cloudy</item>
+        <item>@drawable/snow</item>
+        <item>@drawable/fog</item>
+    </integer-array>
+</resources>
