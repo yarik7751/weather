@@ -35,8 +35,6 @@ public class BeginDataFragment extends BaseFragment implements CitiesAdapter.OnC
     @BindView(R.id.et_city) EditText etCity;
     @BindView(R.id.rv_cities) RecyclerView rvCities;
 
-    private GetCurrentWeatherReceiver getCurrentWeatherReceiver;
-
     private static BeginDataFragment beginDataFragment;
     public static BeginDataFragment getInstance() {
         if(beginDataFragment == null) {
@@ -81,12 +79,9 @@ public class BeginDataFragment extends BaseFragment implements CitiesAdapter.OnC
     }
 
     private void registerReceivers() {
-        getCurrentWeatherReceiver = new GetCurrentWeatherReceiver();
-        getActivity().registerReceiver(getCurrentWeatherReceiver, Utils.getIntentFilter(CurrentWeatherService.ACTION));
     }
 
     private void unregisterReceivers() {
-        getActivity().unregisterReceiver(getCurrentWeatherReceiver);
     }
 
     @OnClick(R.id.btn_set_info)
@@ -106,29 +101,24 @@ public class BeginDataFragment extends BaseFragment implements CitiesAdapter.OnC
         }
         if(city != null && !city.isEmpty()) {
             CustomSharedPreference.setCity(getContext(), city);
-            getActivity().startService(CurrentWeatherService.getIntent(getContext(), city));
+            openWeatherFragment();
         } else {
             Toast.makeText(getContext(), R.string.wrong_data, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void openWeatherFragment() {
+        FragmentManager fragmentManager = getFragmentManager();
+        if(fragmentManager.getBackStackEntryCount() != 0) {
+            ((MainActivity) getActivity()).setFabVisibility(View.VISIBLE);
+            fragmentManager.popBackStack();
+        } else {
+            ((MainActivity) getActivity()).setWeatherFragment();
         }
     }
 
     @Override
     public void onCity(String city) {
         loadCityInfo(city, false);
-    }
-
-    public class GetCurrentWeatherReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            CurrentWeather currentWeather = intent.getParcelableExtra(CurrentWeatherService.ACTION);
-            FragmentManager fragmentManager = getFragmentManager();
-            if(fragmentManager.getBackStackEntryCount() != 0) {
-                ((MainActivity) getActivity()).setFabVisibility(View.VISIBLE);
-                fragmentManager.popBackStack();
-            } else {
-                ((MainActivity) getActivity()).setWeatherFragment(currentWeather);
-            }
-        }
     }
 }

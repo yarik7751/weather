@@ -27,7 +27,7 @@ public class MainActivity extends BaseActivity {
             if(city == null) {
                 setBeginDataFragment(false);
             } else {
-                setWeatherFragment(null);
+                setWeatherFragment();
             }
         }
     }
@@ -37,9 +37,9 @@ public class MainActivity extends BaseActivity {
         setBeginDataFragment(true);
     }
 
-    public void setWeatherFragment(CurrentWeather currentWeather) {
+    public void setWeatherFragment() {
         fab.setVisibility(View.VISIBLE);
-        onSwitchFragment(WeatherFragment.getInstance(currentWeather), "", false, false, R.id.fl_container);
+        onSwitchFragment(WeatherFragment.getInstance(), "", false, false, R.id.fl_container);
     }
 
     public void setBeginDataFragment(boolean add) {

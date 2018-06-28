@@ -19,13 +19,23 @@ public class CustomSharedPreference {
     public static final String SHARED_PREFERENCES_TITLE = "sp_currency_by_yarik";
     public static final String SP_CITY = "SP_CITY";
     public static final String SP_CITY_LIST = "SP_CITY_LIST";
+    public static final String SP_IS_FIRST = "SP_IS_FIRST";
     public static final String SP_CURRENT_WEATHER = "SP_CURRENT_WEATHER";
 
     public static SharedPreferences getSharedPreferences(Context context) {
         return context.getSharedPreferences(SHARED_PREFERENCES_TITLE, Context.MODE_PRIVATE);
     }
 
+    public static boolean isFirstLaunch(Context context) {
+        return getSharedPreferences(context).getBoolean(SP_IS_FIRST, true);
+    }
+
+    public static void setIsFirstLaunch(Context context) {
+        getSharedPreferences(context).edit().putBoolean(SP_IS_FIRST, false).apply();
+    }
+
     public static void setCity(Context context, String city) {
+        city.trim();
         getSharedPreferences(context).edit().putString(SP_CITY, city).apply();
     }
 
@@ -34,6 +44,7 @@ public class CustomSharedPreference {
     }
 
     public static void addCityInList(Context context, String city) {
+        city.trim();
         List<String> cities = getAllCities(context);
         if(cities == null || cities.size() == 0) {
             cities = new ArrayList<String>();
@@ -54,8 +65,10 @@ public class CustomSharedPreference {
     }
 
     private static boolean isExistCityInList(List<String> cities, String city) {
+        city.trim();
         for(int i = 0; i < cities.size(); i++) {
-            if(city.equalsIgnoreCase(cities.get(0))) {
+            String listCity = cities.get(i).trim();
+            if(city.equalsIgnoreCase(listCity)) {
                 return true;
             }
         }

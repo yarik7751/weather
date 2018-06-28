@@ -20,12 +20,36 @@ import by.yarik.yarikweather.util.Utils;
 
 public class WeekWeatherAdapter extends RecyclerView.Adapter<WeekWeatherAdapter.WeekWeatherViewHolder> {
 
+    private final int DAY_TIME = 15;
+    private final int DAY_COUNT = 3;
+
     private Context context;
     private List<WeatherList> listWeather;
 
     public WeekWeatherAdapter(Context context, List<WeatherList> listWeather) {
         this.context = context;
         this.listWeather = listWeather;
+
+        for(int i = listWeather.size() - 1; i >= 0; i--) {
+            WeatherList weather = listWeather.get(i);
+            long hour = DateUtils.getHour(weather.getDt() * 1000);
+            if(hour != DAY_TIME) {
+                listWeather.remove(i);
+            }
+        }
+        if(listWeather.size() >= DAY_COUNT) {
+            for (int i = listWeather.size() - 1; i >= 0; i--) {
+                if(listWeather.size() > DAY_COUNT) {
+                    listWeather.remove(i);
+                } else {
+                    break;
+                }
+            }
+        }
+    }
+
+    private void prepareList() {
+
     }
 
     @Override

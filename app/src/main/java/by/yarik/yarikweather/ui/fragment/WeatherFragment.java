@@ -35,8 +35,6 @@ import by.yarik.yarikweather.util.Utils;
 
 public class WeatherFragment extends BaseFragment {
 
-    private static final String BUNDLE_CURRENT_WEATHER = "BUNDLE_CURRENT_WEATHER";
-
     @BindView(R.id.tv_city) TextView tvCity;
     @BindView(R.id.tv_date) TextView tvDate;
     @BindView(R.id.tv_weather_info) TextView tvWeatherInfo;
@@ -52,13 +50,10 @@ public class WeatherFragment extends BaseFragment {
     @BindView(R.id.img_weather_info) ImageView imgWeatherInfo;
 
     private static WeatherFragment weatherFragment;
-    public static WeatherFragment getInstance(CurrentWeather currentWeather) {
+    public static WeatherFragment getInstance() {
         if(weatherFragment == null) {
             weatherFragment = new WeatherFragment();
         }
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(BUNDLE_CURRENT_WEATHER, currentWeather);
-        weatherFragment.setArguments(bundle);
         return weatherFragment;
     }
 
@@ -94,13 +89,7 @@ public class WeatherFragment extends BaseFragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvWeekWeather.setLayoutManager(layoutManager);
 
-        CurrentWeather currentWeather = getArguments().getParcelable(BUNDLE_CURRENT_WEATHER);
-        if(currentWeather != null) {
-            setCurrentWeatherInfo(currentWeather);
-            startWeekWeatherService();
-        } else {
-            startCurrentWeatherService();
-        }
+        startCurrentWeatherService();
     }
 
     private void startCurrentWeatherService() {

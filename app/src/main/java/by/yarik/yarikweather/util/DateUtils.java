@@ -5,17 +5,23 @@ import android.content.Context;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import by.yarik.yarikweather.R;
 
 public class DateUtils {
 
     public static final String DATE_FORMAT = "dd.MM.yyyy (EEEE)";
-    public static final String DATE_FORMAT_LIST = "dd.MM.yyyy\n(EEEE)\nHH:mm";
+    public static final String DATE_FORMAT_LIST = "dd.MM.yyyy\n(EEEE)";
 
     public static String getDateByStr(Date date, String format) {
-        DateFormat dateFormat = new SimpleDateFormat(format);
+        DateFormat dateFormat = new SimpleDateFormat(format, Locale.US);
         return dateFormat.format(date);
+    }
+
+    public static long getHour(long timestamp) {
+        Date date = new Date(timestamp);
+        return Long.valueOf(getDateByStr(date, "HH"));
     }
 
     public static String getCurrentDateByStr() {
