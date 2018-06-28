@@ -5,11 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.Toast;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -18,14 +24,16 @@ import by.yarik.yarikweather.api.Api;
 import by.yarik.yarikweather.api.pojo.CurrentWeather;
 import by.yarik.yarikweather.service.CurrentWeatherService;
 import by.yarik.yarikweather.ui.activity.MainActivity;
+import by.yarik.yarikweather.ui.adapter.CitiesAdapter;
 import by.yarik.yarikweather.ui.fragment.base.BaseFragment;
 import by.yarik.yarikweather.util.AndroidUtils;
 import by.yarik.yarikweather.util.CustomSharedPreference;
 import by.yarik.yarikweather.util.Utils;
 
-public class BeginDataFragment extends BaseFragment {
+public class BeginDataFragment extends BaseFragment implements CitiesAdapter.OnCityListener {
 
     @BindView(R.id.et_city) EditText etCity;
+    @BindView(R.id.rv_cities) RecyclerView rvCities;
 
     private GetCurrentWeatherReceiver getCurrentWeatherReceiver;
 
@@ -59,8 +67,11 @@ public class BeginDataFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String city = CustomSharedPreference.getCity(getContext());
-        etCity.setText(city != null ? city : "");
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        rvCities.setLayoutManager(layoutManager);
+        List<String> cities = CustomSharedPreference.getAllCities(getContext());
+        CitiesAdapter adapter = new CitiesAdapter(getContext(), cities, this);
+        rvCities.setAdapter(adapter);
     }
 
     @Override
@@ -80,11 +91,19 @@ public class BeginDataFragment extends BaseFragment {
 
     @OnClick(R.id.btn_set_info)
     public void setInfo() {
+        String city = etCity.getText().toString();
+        loadCityInfo(city, true);
+    }
+
+    private void loadCityInfo(String city, boolean addInList) {
+        AndroidUtils.hideKeyboard(getActivity());
         if(!AndroidUtils.isNetworkOnline(getContext())) {
             Toast.makeText(getContext(), R.string.no_connection, Toast.LENGTH_SHORT).show();
             return;
         }
-        String city = etCity.getText().toString();
+        if(addInList) {
+            CustomSharedPreference.addCityInList(getContext(), city);
+        }
         if(city != null && !city.isEmpty()) {
             CustomSharedPreference.setCity(getContext(), city);
             getActivity().startService(CurrentWeatherService.getIntent(getContext(), city));
@@ -93,12 +112,23 @@ public class BeginDataFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public void onCity(String city) {
+        loadCityInfo(city, false);
+    }
+
     public class GetCurrentWeatherReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
             CurrentWeather currentWeather = intent.getParcelableExtra(CurrentWeatherService.ACTION);
-            ((MainActivity) getActivity()).setWeatherFragment(currentWeather);
+            FragmentManager fragmentManager = getFragmentManager();
+            if(fragmentManager.getBackStackEntryCount() != 0) {
+                ((MainActivity) getActivity()).setFabVisibility(View.VISIBLE);
+                fragmentManager.popBackStack();
+            } else {
+                ((MainActivity) getActivity()).setWeatherFragment(currentWeather);
+            }
         }
     }
 }

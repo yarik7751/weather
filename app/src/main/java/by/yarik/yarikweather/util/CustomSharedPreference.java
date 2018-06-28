@@ -2,9 +2,14 @@ package by.yarik.yarikweather.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import by.yarik.yarikweather.api.pojo.CurrentWeather;
 
@@ -13,6 +18,7 @@ public class CustomSharedPreference {
     public static final String TAG = "CS_Preference_logs";
     public static final String SHARED_PREFERENCES_TITLE = "sp_currency_by_yarik";
     public static final String SP_CITY = "SP_CITY";
+    public static final String SP_CITY_LIST = "SP_CITY_LIST";
     public static final String SP_CURRENT_WEATHER = "SP_CURRENT_WEATHER";
 
     public static SharedPreferences getSharedPreferences(Context context) {
@@ -27,16 +33,32 @@ public class CustomSharedPreference {
         return getSharedPreferences(context).getString(SP_CITY, null);
     }
 
-    public static void setCurrentWeather(Context context, CurrentWeather currentWeather) {
-        Gson gson = new Gson();
-        String currentWeatherInfoString = gson.toJson(currentWeather, CurrentWeather.class).toString();
-        Log.d(TAG, "currentWeatherInfoString: " + currentWeatherInfoString);
-        getSharedPreferences(context).edit().putString(SP_CURRENT_WEATHER, currentWeatherInfoString).apply();
+    public static void addCityInList(Context context, String city) {
+        List<String> cities = getAllCities(context);
+        if(cities == null || cities.size() == 0) {
+            cities = new ArrayList<String>();
+        }
+        if(!isExistCityInList(cities, city)) {
+            cities.add(city);
+            getSharedPreferences(context).edit().putString(SP_CITY_LIST, StringUtils.listToString(cities)).apply();
+        }
     }
 
-    public static CurrentWeather getCurrentWeather(Context context) {
-        String currentWeatherInfoString = getSharedPreferences(context).getString(SP_CURRENT_WEATHER, null);
-        Gson gson = new Gson();
-        return gson.fromJson(currentWeatherInfoString, CurrentWeather.class);
+    public static List<String> getAllCities(Context context) {
+        String citiesStr = getSharedPreferences(context).getString(SP_CITY_LIST, null);
+        if(TextUtils.isEmpty(citiesStr)) {
+            return null;
+        } else {
+            return StringUtils.StringToList(citiesStr);
+        }
+    }
+
+    private static boolean isExistCityInList(List<String> cities, String city) {
+        for(int i = 0; i < cities.size(); i++) {
+            if(city.equalsIgnoreCase(cities.get(0))) {
+                return true;
+            }
+        }
+        return false;
     }
 }

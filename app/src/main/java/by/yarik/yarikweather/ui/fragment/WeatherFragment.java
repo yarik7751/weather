@@ -87,6 +87,7 @@ public class WeatherFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         setTopSize();
+        ((MainActivity) getActivity()).setFabVisibility(View.VISIBLE);
         llWeatherTitle.setVisibility(View.INVISIBLE);
         llWeatherData.setVisibility(View.INVISIBLE);
         llTopInfo.setBackgroundResource(DateUtils.getResByDayOfWeek(getContext()));

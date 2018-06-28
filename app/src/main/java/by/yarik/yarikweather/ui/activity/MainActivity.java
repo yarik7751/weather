@@ -46,4 +46,8 @@ public class MainActivity extends BaseActivity {
         fab.setVisibility(View.GONE);
         onSwitchFragment(BeginDataFragment.getInstance(), "", add, false, R.id.fl_container);
     }
+
+    public void setFabVisibility(int visibility) {
+        fab.setVisibility(visibility);
+    }
 }
