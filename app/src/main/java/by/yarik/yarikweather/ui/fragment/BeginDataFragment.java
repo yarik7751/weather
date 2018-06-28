@@ -87,6 +87,7 @@ public class BeginDataFragment extends BaseFragment implements CitiesAdapter.OnC
     @OnClick(R.id.btn_set_info)
     public void setInfo() {
         String city = etCity.getText().toString();
+        etCity.setText("");
         loadCityInfo(city, true);
     }
 

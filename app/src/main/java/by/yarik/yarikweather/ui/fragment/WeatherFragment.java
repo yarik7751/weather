@@ -90,6 +90,7 @@ public class WeatherFragment extends BaseFragment {
         rvWeekWeather.setLayoutManager(layoutManager);
 
         startCurrentWeatherService();
+        startWeekWeatherService();
     }
 
     private void startCurrentWeatherService() {
@@ -180,7 +181,7 @@ public class WeatherFragment extends BaseFragment {
             pbLoadCurrentWeather.setVisibility(View.GONE);
             CurrentWeather currentWeather = intent.getParcelableExtra(CurrentWeatherService.ACTION);
             setCurrentWeatherInfo(currentWeather);
-            startWeekWeatherService();
+            //startWeekWeatherService();
         }
     }
 
